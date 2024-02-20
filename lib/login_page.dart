@@ -16,18 +16,25 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             backgroundColor: Colors.black),
-        body: const Padding(
-          padding: EdgeInsets.all(10),
+        body: Padding(
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              SizedBox(height: 200,),
-              SizedBox(
+              const SizedBox(
                 height: 200,
-                
+                child: Center(
+                  child: Text(
+                    "Log In",
+                    style: TextStyle(fontSize: 26),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 300,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    TextField(
+                    const TextField(
                       decoration: InputDecoration(
                         hintText: "Email",
                         border: OutlineInputBorder(
@@ -37,10 +44,9 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    TextField(
+                    const TextField(
                       obscureText: true,
                       decoration: InputDecoration(
-                        
                         hintText: "Password",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -49,6 +55,10 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text("login"),
+                    )
                   ],
                 ),
               ),
