@@ -13,16 +13,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Reunify",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: Colors.black,
-        ),
         body: Stack(
           children: [
             Image.asset(
@@ -31,12 +21,25 @@ class _LoginPageState extends State<LoginPage> {
               height: double.infinity,
               opacity: const AlwaysStoppedAnimation(.75),
             ),
+            Container(
+              margin: const EdgeInsets.all(10),
+              height: 60,
+              width: double.infinity,
+              child: Text(
+                "Reunify",
+                style: TextStyle(
+                  color: signUp ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(10),
               child: ListView(
                 children: [
                   SizedBox(
-                    height: 150,
+                    height: signUp ? 200 : 250,
                     child: Center(
                       child: Text(
                         signUp ? "Sign Up" : "Log In",
@@ -122,6 +125,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
+                        signUp
+                            ? Container()
+                            : const SizedBox(
+                                height: 20,
+                              ),
                         Container(
                           margin: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -131,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: TextField(
                             obscureText: true,
                             decoration: InputDecoration(
-                              hintText: signUp ? "Create Password": "Password",
+                              hintText: signUp ? "Create Password" : "Password",
                               border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(40),
@@ -161,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                               )
                             : Container(),
                         Padding(
-                          padding: const EdgeInsets.only(top:19),
+                          padding: const EdgeInsets.only(top: 19),
                           child: ElevatedButton(
                             onPressed: () {},
                             child: Text(signUp ? "SignUp" : "Login"),
@@ -185,8 +193,10 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                                 child: Text(
                                   signUp ? " Login" : 'Sign up',
-                                  style: const TextStyle(
-                                    color: Colors.blue,
+                                  style: TextStyle(
+                                    color: signUp
+                                        ? Colors.white
+                                        : Color.fromARGB(255, 240, 5, 5),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
