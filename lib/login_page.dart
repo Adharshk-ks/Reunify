@@ -16,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
         body: Stack(
           children: [
             Image.asset(
-              signUp ? 'assets/pg_2.jpg' : 'assets/login_bg1.png',
-              fit: BoxFit.fitHeight,
+              signUp ? 'assets/ch2.jpg' : 'assets/ch6.jpg',
+              fit: BoxFit.fitHeight, 
               height: double.infinity,
               opacity: const AlwaysStoppedAnimation(.75),
             ),
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? Container(
                                 margin: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
+                                  borderRadius: BorderRadius.circular(15),
                                   color: Colors.white,
                                 ),
                                 child: const TextField(
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                                     hintText: "First Name",
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(40),
+                                        Radius.circular(15),
                                       ),
                                     ),
                                   ),
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? Container(
                                 margin: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
+                                  borderRadius: BorderRadius.circular(15),
                                   color: Colors.white,
                                 ),
                                 child: const TextField(
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                     hintText: "Last Name",
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(40),
+                                        Radius.circular(15),
                                       ),
                                     ),
                                   ),
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? Container(
                                 margin: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
+                                  borderRadius: BorderRadius.circular(15),
                                   color: Colors.white,
                                 ),
                                 child: const TextField(
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                                     hintText: "Username",
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(40),
+                                        Radius.circular(15),
                                       ),
                                     ),
                                   ),
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           margin: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
+                            borderRadius: BorderRadius.circular(15),
                             color: Colors.white,
                           ),
                           child: const TextField(
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Email",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(40),
+                                  Radius.circular(15),
                                 ),
                               ),
                             ),
@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           margin: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
+                            borderRadius: BorderRadius.circular(15),
                             color: Colors.white,
                           ),
                           child: TextField(
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: signUp ? "Create Password" : "Password",
                               border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(40),
+                                  Radius.circular(15),
                                 ),
                               ),
                             ),
@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? Container(
                                 margin: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
+                                  borderRadius: BorderRadius.circular(15),
                                   color: Colors.white,
                                 ),
                                 child: const TextField(
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                                     hintText: "Confirm Password",
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(40),
+                                        Radius.circular(15),
                                       ),
                                     ),
                                   ),
@@ -169,10 +169,37 @@ class _LoginPageState extends State<LoginPage> {
                               )
                             : Container(),
                         Padding(
-                          padding: const EdgeInsets.only(top: 19),
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: Text(signUp ? "SignUp" : "Login"),
+                          padding: const EdgeInsets.only(top: 19, bottom: 20),
+                          child: Container(
+                            height: 50,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Color.fromARGB(255, 67, 59, 59),
+                                    blurRadius: 4,
+                                    offset: Offset(4, 4))
+                              ],
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                              gradient: LinearGradient(
+                                colors: signUp
+                                    ? [
+                                        Color.fromARGB(255, 248, 137, 33),
+                                        Color.fromARGB(255, 236, 48, 48),
+                                      ]
+                                    : [
+                                        Color.fromARGB(255, 48, 243, 168),
+                                        Color.fromARGB(255, 83, 107, 229),
+                                      ],
+                              ),
+                            ),
+                            child: Center(
+                                child: Text(
+                              signUp ? "SignUp" : "Login",
+                              style: const TextStyle(color: Color.fromARGB(255, 252, 252, 251)),
+                            )),
                           ),
                         ),
                         Row(
@@ -195,8 +222,8 @@ class _LoginPageState extends State<LoginPage> {
                                   signUp ? " Login" : 'Sign up',
                                   style: TextStyle(
                                     color: signUp
-                                        ? Colors.white
-                                        : Color.fromARGB(255, 240, 5, 5),
+                                        ? Color.fromARGB(255, 52, 122, 236)
+                                        : Color.fromARGB(255, 41, 93, 235),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
