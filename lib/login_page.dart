@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reunify/profile_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Image.asset(
               signUp ? 'assets/ch2.jpg' : 'assets/ch6.jpg',
-              fit: BoxFit.fitHeight, 
+              fit: BoxFit.fitHeight,
               height: double.infinity,
               opacity: const AlwaysStoppedAnimation(.75),
             ),
@@ -170,36 +171,42 @@ class _LoginPageState extends State<LoginPage> {
                             : Container(),
                         Padding(
                           padding: const EdgeInsets.only(top: 19, bottom: 20),
-                          child: Container(
-                            height: 50,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              boxShadow: const [
-                                BoxShadow(
-                                    color: Color.fromARGB(255, 67, 59, 59),
-                                    blurRadius: 4,
-                                    offset: Offset(4, 4))
-                              ],
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(30),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/home');
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color: Color.fromARGB(255, 67, 59, 59),
+                                      blurRadius: 4,
+                                      offset: Offset(4, 4))
+                                ],
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                                gradient: LinearGradient(
+                                  colors: signUp
+                                      ? [
+                                          Color.fromARGB(255, 248, 137, 33),
+                                          Color.fromARGB(255, 236, 48, 48),
+                                        ]
+                                      : [
+                                          Color.fromARGB(255, 48, 243, 168),
+                                          Color.fromARGB(255, 83, 107, 229),
+                                        ],
+                                ),
                               ),
-                              gradient: LinearGradient(
-                                colors: signUp
-                                    ? [
-                                        Color.fromARGB(255, 248, 137, 33),
-                                        Color.fromARGB(255, 236, 48, 48),
-                                      ]
-                                    : [
-                                        Color.fromARGB(255, 48, 243, 168),
-                                        Color.fromARGB(255, 83, 107, 229),
-                                      ],
-                              ),
+                              child: Center(
+                                  child: Text(
+                                signUp ? "SignUp" : "Login",
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 251, 252, 251)),
+                              )),
                             ),
-                            child: Center(
-                                child: Text(
-                              signUp ? "SignUp" : "Login",
-                              style: const TextStyle(color: Color.fromARGB(255, 252, 252, 251)),
-                            )),
                           ),
                         ),
                         Row(
