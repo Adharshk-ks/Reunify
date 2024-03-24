@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reunify/profile_page.dart';
 
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -17,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
         body: Stack(
           children: [
             Image.asset(
-              signUp ? 'assets/ch2.jpg' : 'assets/ch6.jpg',
+              signUp ? 'assets/ch2.jpg' : 'assets/Android Large - 8.jpg',
               fit: BoxFit.fitHeight,
               height: double.infinity,
               opacity: const AlwaysStoppedAnimation(.75),
@@ -195,8 +196,8 @@ class _LoginPageState extends State<LoginPage> {
                                           Color.fromARGB(255, 236, 48, 48),
                                         ]
                                       : [
-                                          Color.fromARGB(255, 48, 243, 168),
-                                          Color.fromARGB(255, 83, 107, 229),
+                                          Color.fromARGB(255, 25, 26, 26),
+                                          Color.fromARGB(255, 94, 98, 117),
                                         ],
                                 ),
                               ),

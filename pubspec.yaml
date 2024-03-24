@@ -89,5 +89,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
-   - assets/ch6.jpg
+   - assets/Android Large - 8.jpg
    - assets/ch2.jpg
+   
