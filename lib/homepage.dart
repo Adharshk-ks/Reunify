@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reunify/widget/bottom_navigation.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -7,10 +8,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lost & Found App'),
-        actions: [ // Corrected from 'action' to 'actions'
+        title: const Text('Lost & Found App'),
+        actions: [
+          // Corrected from 'action' to 'actions'
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               // Add search functionality here
             },
@@ -23,9 +25,9 @@ class HomePage extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 42, 43, 45),
+                color: Color.fromARGB(255, 42, 43, 45),
               ),
               child: Text(
                 'Menu',
@@ -36,31 +38,41 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
               onTap: () {
                 // Add home navigation functionality here
               },
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
               onTap: () {
+                Navigator.pushNamed(context, '/profile');
                 // Add profile navigation functionality here
               },
             ),
             ListTile(
-              leading: Icon(Icons.chat),
-              title: Text('Chat'),
+              leading: const Icon(Icons.chat),
+              title: const Text('Chat'),
               onTap: () {
+                Navigator.pushNamed(context, '/chat');
                 // Add chat navigation functionality here
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
               onTap: () {
                 // Add settings navigation functionality here
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text('Logout'),
+              onTap: () {
+                Navigator.pushNamed(context, '/login');
+                // Add profile navigation functionality here
               },
             ),
           ],
@@ -75,7 +87,7 @@ class HomePage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           // Other widgets can be added on top of the background image
-          Center(
+          const Center(
             child: Text(
               'Welcome to Reunify',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -83,28 +95,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        selectedItemColor: const Color.fromARGB(255, 38, 39, 40),
-        // Add navigation functionality here
-      ),
+      bottomNavigationBar: AppBottomNavigation(ci: 0,)
     );
   }
 }

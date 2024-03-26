@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reunify/widget/bottom_navigation.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class ProfilePage extends StatelessWidget {
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new),
                     onPressed: () {
+                      Navigator.pop(context);
                       // Implement back button functionality
                     },
                   ),
@@ -73,8 +75,8 @@ class ProfilePage extends StatelessWidget {
                       Radius.circular(30),
                     ),
                     gradient: LinearGradient(colors: [
-                      Color.fromARGB(255, 248, 137, 33),
-                      Color.fromARGB(255, 236, 48, 48),
+                      Color.fromARGB(255, 8, 8, 16),
+                      Color.fromARGB(255, 87, 93, 122),
                     ]),
                   ),
                   child: const Center(
@@ -88,6 +90,7 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: AppBottomNavigation(ci: 1),
     );
   }
 

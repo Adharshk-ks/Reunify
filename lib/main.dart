@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reunify/chat.dart';
 import 'package:reunify/login_page.dart';
 
 import 'homepage.dart';
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
         '/profile': (context) => const ProfilePage(),
+        '/chat': (context) => const ChatPage(),
+        
       },
       // home: LoginPage(),
     );
