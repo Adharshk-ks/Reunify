@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:reunify/found_page.dart'; // Import the FoundPage
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class FoundPage extends StatelessWidget {
+  const FoundPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,41 +21,58 @@ class LoginPage extends StatelessWidget {
         body: Stack(
           children: [
             Image.asset(
-              'assets/login_bg1.png',
+                  'assets/login_bg1.png',
               fit: BoxFit.fitHeight,
               height: double.infinity,
               opacity: const AlwaysStoppedAnimation(.75),
             ),
             Container(
               padding: const EdgeInsets.all(10),
+              // decoration: const BoxDecoration(color: Color.fromARGB(255, 127, 244, 95)),
               child: Column(
                 children: [
                   SizedBox(
-                    height: 200,
+                    height: 150,
                     child: Center(
                       child: Text(
-                        "Log In",
-                        style: GoogleFonts.teko(fontSize: 40),
+                        "Found It",
+                        style: GoogleFonts.teko(fontSize: 44),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 350,
-                    width: 300,
+                   Container(
+                          width: 180, // Increase the width of the button
+                          height: 140, // Increase the height of the button
+                          child: ElevatedButton(
+                            onPressed: () {},
+                         child: const Text(
+                        "Choose Image",
+                            style: TextStyle(fontSize: 20),
+                        ),
+                            ),
+                          ),
+
+                 SizedBox(
+                    height: 400, // Double the height of the container
+                    width: 350, // Increase the width of the container
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
+                          height: 120, // Double the height of the input box
+                          width: 450 , // Increase the width of the input box
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
+                            borderRadius: BorderRadius.circular(20),
                             color: Colors.white,
                           ),
                           child: const TextField(
+                            maxLines: 6, // Allow for more lines of text
                             decoration: InputDecoration(
-                              hintText: "Email",
+                              hintText: "Give the Description of the item found...",
+                              hintStyle: TextStyle(fontSize: 20),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(40),
+                                  Radius.circular(20),
                                 ),
                               ),
                             ),
@@ -68,10 +84,10 @@ class LoginPage extends StatelessWidget {
                             color: Colors.white,
                           ),
                           child: const TextField(
-                            obscureText: true,
                             decoration: InputDecoration(
-                              hintText: "Password",
-                              border: OutlineInputBorder(
+                                 hintText: "Enter The Location",
+                                  hintStyle: TextStyle(fontSize: 20),
+                                    border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(40),
                                 ),
@@ -79,47 +95,16 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         ),
+                      
                         ElevatedButton(
-                          onPressed: () {
-                            // Navigate to FoundPage when the button is pressed
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FoundPage(),
-                              ),
-                            );
-                          },
-                          child: const Text("Login"),
-                        ),
-                        RichText(
-                          text: const TextSpan(
-                            text: "Already have an account? ",
-                            style: TextStyle(fontSize: 18),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Sign in',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                          onPressed: () {},
+                         child: const Text(
+                        "POST",
+                            style: TextStyle(fontSize: 20),
+                        ),                        
+                       ),
                       ],
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to FoundPage when the button is pressed
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FoundPage(),
-                        ),
-                      );
-                    },
-                    child: const Text("Go to Found Page"),
                   ),
                 ],
               ),
@@ -130,3 +115,10 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
