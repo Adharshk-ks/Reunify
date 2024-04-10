@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reunify/widget/bottom_navigation.dart';
+import 'package:gap/gap.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lost & Found App'),
+        title: const Text('Reunify'),
         actions: [
           // Corrected from 'action' to 'actions'
           IconButton(
@@ -21,55 +23,56 @@ class HomePage extends StatelessWidget {
         ],
       ),
       drawer: Drawer(
+        backgroundColor: Color.fromARGB(255, 34, 20, 41),
         // Add hamburger icon functionality here
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 42, 43, 45),
-              ),
+           
+            Padding(
+              padding: const EdgeInsets.only(bottom: 90, top: 50, left: 10),
               child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 246, 243, 243),
-                  fontSize: 24,
+                  'Reunify',
+                  style: TextStyle(
+                    color: Color(0xFFF3F2F2),
+                    fontSize: 24,
+                  ),
                 ),
-              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
+              leading: const Icon(Icons.home, color: Color.fromRGBO(251, 251, 251, 1)),
+              title: const Text('Home', style: TextStyle(color: Color.fromARGB(255, 255, 254, 254))), 
               onTap: () {
                 // Add home navigation functionality here
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Profile'),
+              leading: const Icon(Icons.person, color: Color.fromARGB(255, 250, 248, 248)),
+              title: const Text('Profile', style: TextStyle(color: Color.fromARGB(255, 255, 254, 254))),
               onTap: () {
                 Navigator.pushNamed(context, '/profile');
                 // Add profile navigation functionality here
               },
             ),
             ListTile(
-              leading: const Icon(Icons.chat),
-              title: const Text('Chat'),
+              leading: const Icon(Icons.chat, color: Color.fromARGB(255, 254, 254, 254)),
+              title: const Text('Chat', style: TextStyle(color: Color.fromARGB(255, 254, 254, 254))),
               onTap: () {
                 Navigator.pushNamed(context, '/chat');
                 // Add chat navigation functionality here
               },
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
+              leading: const Icon(Icons.settings, color: Color.fromARGB(255, 251, 250, 250)),
+              title: const Text('Settings', style: TextStyle(color: Color.fromARGB(255, 255, 254, 254))),
               onTap: () {
                 // Add settings navigation functionality here
               },
             ),
+            const Gap(325),
             ListTile(
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text('Logout'),
+              leading: const Icon(Icons.exit_to_app, color: Color.fromARGB(255, 254, 254, 254)),
+              title: const Text('Logout', style: TextStyle(color: Color.fromARGB(255, 254, 254, 254))),
               onTap: () {
                 Navigator.pushNamed(context, '/login');
                 // Add profile navigation functionality here
