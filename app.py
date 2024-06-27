@@ -4,6 +4,8 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_migrate import Migrate
 import os
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 app = Flask(__name__)
 
@@ -16,6 +18,11 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+# Firebase initialization
+cred = credentials.Certificate("credentials.json")
+firebase_admin.initialize_app(cred)
+firestore_db = firestore.client()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -200,6 +207,26 @@ def homepage():
                        "profile": "/api/profile",
                        "protected": "/api/protected"
                    }), 200
+
+# Test Firestore connection route
+@app.route('/api/test_firestore', methods=['GET'])
+def test_firestore():
+    try:
+        # Create a test document
+        doc_ref = firestore_db.collection('test_collection').document('test_document')
+        doc_ref.set({
+            'test_field': 'test_value'
+        })
+
+        # Retrieve the test document
+        doc = doc_ref.get()
+        if doc.exists:
+            return jsonify(message="Firestore connection successful!", document=doc.to_dict()), 200
+        else:
+            return jsonify(message="Test document not found in Firestore"), 404
+
+    except Exception as e:
+        return jsonify(message=f"An error occurred: {str(e)}"), 500
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
