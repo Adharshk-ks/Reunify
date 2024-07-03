@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reunify/chat.dart';
 import 'package:reunify/login_page.dart';
+import 'package:reunify/settings.dart';
+import 'package:reunify/newpostpage.dart';
+import 'package:reunify/contact.dart';
 
 import 'homepage.dart';
 import 'profile_page.dart';
@@ -14,16 +17,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      debugShowCheckedModeBanner: false, 
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Reunify",
-      initialRoute: '/login',
+      initialRoute: '/contact',
       routes: {
         '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
         '/profile': (context) => const ProfilePage(),
         '/chat': (context) => const ChatPage(),
-        
+        '/settings': (context) => const SettingsPage(),
+        '/newPost': (context) => const NewPostPage(),
+        '/contact': (context) => const ContactPage(),
+
       },
       // home: LoginPage(),
     );

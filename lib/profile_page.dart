@@ -75,8 +75,8 @@ class ProfilePage extends StatelessWidget {
                       Radius.circular(30),
                     ),
                     gradient: LinearGradient(colors: [
-                      Color.fromARGB(255, 8, 8, 16),
-                      Color.fromARGB(255, 87, 93, 122),
+                      Color.fromARGB(255, 56, 8, 62),
+                      Color.fromARGB(255, 56, 8, 62),
                     ]),
                   ),
                   child: const Center(

@@ -17,22 +17,26 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         children: [
           Image.asset(
-            signUp ? 'assets/ch2.jpg' : 'assets/Android Large - 8.jpg',
+            signUp ? 'assets/Login.jpg' : 'assets/Login.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
             opacity: const AlwaysStoppedAnimation(.75),
           ),
-          Container(
-            margin: const EdgeInsets.all(10),
-            height: 60,
-            width: double.infinity,
-            child: Text(
-              "Reunify",
-              style: TextStyle(
-                color: signUp ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 5),
+
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              height: 60,
+              width: double.infinity,
+              child: Text(
+                "Reunify ",
+                style: TextStyle(
+                  color: signUp ? Colors.black : Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                ),
               ),
             ),
           ),
@@ -44,8 +48,12 @@ class _LoginPageState extends State<LoginPage> {
                   height: signUp ? 200 : 250,
                   child: Center(
                     child: Text(
-                      signUp ? "Sign Up" : "Log In",
-                      style: const TextStyle(fontSize: 26),
+                      signUp ? "Sign Up" : "Login",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
                     ),
                   ),
                 ),
@@ -72,25 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             )
                           : Container(),
-                      signUp
-                          ? Container(
-                              margin: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
-                              ),
-                              child: const TextField(
-                                decoration: InputDecoration(
-                                  hintText: "Last Name",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(15),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(),
+
                       signUp
                           ? Container(
                               margin: const EdgeInsets.all(10),
@@ -196,8 +186,8 @@ class _LoginPageState extends State<LoginPage> {
                                         Color.fromARGB(255, 236, 48, 48),
                                       ]
                                     : [
-                                        Color.fromARGB(255, 25, 26, 26),
-                                        Color.fromARGB(255, 94, 98, 117),
+                                        Color.fromARGB(255, 12, 12, 12),
+                                        Color.fromARGB(255, 10, 10, 10),
                                       ],
                               ),
                             ),

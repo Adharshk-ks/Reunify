@@ -30,12 +30,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: ^0.8.4+7
+  flutter_native_splash: ^2.3.11
+  gap: ^3.0.1
+
+    #cupertino_icons: ^1.0.6
+
+    #utility packages
+  # flutter_native_splash: ^2.3.2
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  gap: ^3.0.1
+  # cupertino_icons: ^1.0.6
+  # gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -90,7 +98,7 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
-   - assets/Android Large - 8.jpg
-   - assets/ch2.jpg
-   - assets/chatbg.png
-   
+   - assets/AndroidLarge-8.jpg
+   - assets/wooden-keychain-white.jpg
+   - assets/Logo.png
+   - assets/Login.jpg
