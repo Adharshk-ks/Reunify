@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart'; // Add this import for Fireba
 import 'package:reunifyfiire/chat.dart';
 import 'package:reunifyfiire/firebase_options.dart';
 import 'package:reunifyfiire/login_page.dart';
+import 'package:reunifyfiire/search.dart';
 import 'package:reunifyfiire/settings.dart';
 import 'package:reunifyfiire/newpostpage.dart';
 import 'package:reunifyfiire/contact.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
         '/newPost': (context) => const NewPostPage(),
         '/contact': (context) => const ContactPage(),
+        '/search': (context) => const SearchPage(),
         
       },
       // home: LoginPage(),

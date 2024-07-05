@@ -23,6 +23,7 @@ class HomePage extends StatelessWidget {
               productName: productName,
               location: location,
               contact: contact,
+              imageUrl: imageUrl,
             ),
           ),
         );
@@ -80,6 +81,7 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.search),
             onPressed: () {
               // Add search functionality here
+              Navigator.pushNamed(context, '/search');
             },
           ),
         ],
@@ -137,22 +139,25 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
-            }
+      body: Container(
+        color: Color.fromARGB(255, 241, 221, 250), // Set your desired background color here
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                return _buildProductCard(context, snapshot.data!.docs[index]);
-              },
-            );
-          },
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  return _buildProductCard(context, snapshot.data!.docs[index]);
+                },
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
