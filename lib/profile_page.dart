@@ -1,8 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:reunifyfiire/widget/bottom_navigation.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool _isEditing = false;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  late String _userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _userId = user.uid;
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(_userId).get();
+      setState(() {
+        _nameController.text = userDoc['firstName'];
+        _emailController.text = userDoc['email'];
+        _usernameController.text = userDoc['username'];
+      });
+    }
+  }
+
+  Future<void> _saveChanges() async {
+    if (_userId.isNotEmpty) {
+      await FirebaseFirestore.instance.collection('users').doc(_userId).update({
+        'firstName': _nameController.text,
+        'email': _emailController.text,
+        'username': _usernameController.text,
+      });
+      setState(() {
+        _isEditing = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +59,11 @@ class ProfilePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onTap: () {
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  onPressed: () {
                     Navigator.pop(context);
-                  
                   },
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // Implement back button functionality
-                    },
-                  ),
                 ),
                 const Text(
                   'Profile Page',
@@ -37,7 +75,9 @@ class ProfilePage extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () {
-                    // Implement edit button functionality
+                    setState(() {
+                      _isEditing = true;
+                    });
                   },
                 ),
               ],
@@ -56,35 +96,45 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                _buildInputField(label: 'Name', hintText: 'Enter your name'),
-                const SizedBox(height: 20),
-                _buildInputField(label: 'Email', hintText: 'Enter your email'),
-                const SizedBox(height: 20),
                 _buildInputField(
-                    label: 'Country', hintText: 'Enter your country'),
-                const SizedBox(height: 20),
-                _buildInputField(
-                    label: 'Date of Birth',
-                    hintText: 'Enter your date of birth'),
-                const SizedBox(height: 30),
-                Container(
-                  height: 50,
-                  width: 200,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                    gradient: LinearGradient(colors: [
-                      Color.fromARGB(255, 56, 8, 62),
-                      Color.fromARGB(255, 56, 8, 62),
-                    ]),
-                  ),
-                  child: const Center(
-                      child: Text(
-                    'Save Changes',
-                    style: TextStyle(color: Color.fromARGB(255, 251, 252, 251)),
-                  )),
+                  controller: _nameController,
+                  label: 'Name',
+                  hintText: 'Enter your name',
+                  enabled: _isEditing,
                 ),
+                const SizedBox(height: 20),
+                _buildInputField(
+                  controller: _emailController,
+                  label: 'Email',
+                  hintText: 'Enter your email',
+                  enabled: _isEditing,
+                ),
+                const SizedBox(height: 20),
+                _buildInputField(
+                  controller: _usernameController,
+                  label: 'Username',
+                  hintText: 'Enter your username',
+                  enabled: _isEditing,
+                ),
+                const SizedBox(height: 30),
+                _isEditing
+                    ? ElevatedButton(
+                        onPressed: _saveChanges,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text(
+                          'Save Changes',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           ),
@@ -94,8 +144,15 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField({required String label, required String hintText}) {
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String label,
+    required String hintText,
+    required bool enabled,
+  }) {
     return TextFormField(
+      controller: controller,
+      enabled: enabled,
       decoration: InputDecoration(
         labelText: label,
         hintText: hintText,
