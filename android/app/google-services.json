@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "535559477740",
+    "project_id": "reunify-3eef3",
+    "storage_bucket": "reunify-3eef3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535559477740:android:7cfa0bef15a8de445608c9",
+        "android_client_info": {
+          "package_name": "com.example.reunify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKUwKWAqfFMCzyWmCABEeKXUpTH2EjvCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
