@@ -64,6 +64,38 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Wrap(
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(Icons.delete),
+                            title: Text('Delete'),
+                            onTap: () {
+                              FirebaseFirestore.instance
+                                  .collection('posts')
+                                  .doc(document.id)
+                                  .delete()
+                                  .then((_) {
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Item deleted'),
+                                  ),
+                                );
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -140,7 +172,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Color.fromARGB(255, 241, 221, 250), // Set your desired background color here
+        color: Color.fromARGB(255, 236, 215, 252), // Set your desired background color here
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: StreamBuilder(
@@ -165,6 +197,8 @@ class HomePage extends StatelessWidget {
           Navigator.pushNamed(context, '/newPost');
         },
         child: Icon(Icons.add),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: AppBottomNavigation(ci: 0),

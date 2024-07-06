@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -15,8 +15,7 @@ class _SearchPageState extends State<SearchPage> {
   final ImagePicker _picker = ImagePicker();
   XFile? _selectedImage;
 
-  void _searchByName() {
-    String query = _searchController.text;
+  void _searchByName(String query) {
     // Implement search by name logic here
     print('Searching by name: $query');
   }
@@ -29,7 +28,54 @@ class _SearchPageState extends State<SearchPage> {
       });
       // Implement search by image logic here
       print('Searching by image: ${image.path}');
+      _searchByName('Image search: ${image.path}');
     }
+  }
+
+  void _removeSelectedImage() {
+    setState(() {
+      _selectedImage = null;
+    });
+  }
+
+  Widget _buildSearchBar() {
+    return TextField(
+      controller: _searchController,
+      decoration: InputDecoration(
+        labelText: 'Search by Name/Description',
+        border: OutlineInputBorder(),
+        prefixIcon: _selectedImage != null
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.file(File(_selectedImage!.path), fit: BoxFit.cover),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: _removeSelectedImage,
+                    ),
+                  ],
+                ),
+              )
+            : null,
+        suffixIcon: IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            String query = _searchController.text;
+            _searchByName(query);
+          },
+        ),
+      ),
+      onSubmitted: (_) {
+        String query = _searchController.text;
+        _searchByName(query);
+      },
+    );
   }
 
   @override
@@ -43,33 +89,18 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                labelText: 'Search by Name',
-                border: OutlineInputBorder(),
-              ),
-              onSubmitted: (_) => _searchByName(),
-            ),
+            _buildSearchBar(),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _searchByName,
-              child: Text('Search by Name'),
-            ),
-            SizedBox(height: 16),
-            if (_selectedImage != null)
-              Column(
-                children: [
-                  Image.file(
-                    File(_selectedImage!.path),
-                    height: 200,
-                  ),
-                  SizedBox(height: 16),
-                ],
-              ),
             ElevatedButton(
               onPressed: _searchByImage,
-              child: Text('Search by Image'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.camera_alt),
+                  SizedBox(width: 8),
+                  Text('Search by Image'),
+                ],
+              ),
             ),
           ],
         ),

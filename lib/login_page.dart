@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: TextField(
                             controller: _firstNameController,
                             decoration: const InputDecoration(
-                              hintText: "First Name",
+                              hintText: "Name",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(15),

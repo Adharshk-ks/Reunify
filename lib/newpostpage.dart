@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart'; // Add this import for Firebase Storage
-import 'package:cloud_firestore/cloud_firestore.dart'; // Add this import for Firestore
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:universal_io/io.dart' as uio;
 
 class NewPostPage extends StatefulWidget {
@@ -15,8 +15,10 @@ class NewPostPage extends StatefulWidget {
 class _NewPostPageState extends State<NewPostPage> {
   uio.File? _image;
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController(); // New controller for description
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
+  final TextEditingController _timeOfLostController = TextEditingController(); // New controller for Time of lost
   String? _imageUrl;
 
   Future<void> _pickImage() async {
@@ -32,10 +34,12 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Future<void> _submitPost() async {
     final name = _nameController.text;
+    final description = _descriptionController.text; // Get the description text
     final location = _locationController.text;
     final contact = _contactController.text;
+    final timeOfLost = _timeOfLostController.text; // Get the time of lost text
 
-    if (_image == null || name.isEmpty || location.isEmpty || contact.isEmpty) {
+    if (_image == null || name.isEmpty || description.isEmpty || location.isEmpty || contact.isEmpty || timeOfLost.isEmpty) {
       // Handle empty fields or image (e.g., show a Snackbar or Dialog)
       return;
     }
@@ -52,8 +56,10 @@ class _NewPostPageState extends State<NewPostPage> {
       // Save post data to Firestore
       await FirebaseFirestore.instance.collection('posts').add({
         'name': name,
+        'description': description, // Save description
         'location': location,
         'contact': contact,
+        'timeOfLost': timeOfLost, // Save time of lost
         'imageUrl': imageUrl,
         'timestamp': Timestamp.now(),
       });
@@ -121,6 +127,12 @@ class _NewPostPageState extends State<NewPostPage> {
               ),
               SizedBox(height: 20),
               _buildInputField(
+                controller: _descriptionController,
+                label: 'Description',
+                hintText: 'Enter the description',
+              ),
+              SizedBox(height: 20),
+              _buildInputField(
                 controller: _locationController,
                 label: 'Location',
                 hintText: 'Enter the location',
@@ -130,6 +142,12 @@ class _NewPostPageState extends State<NewPostPage> {
                 controller: _contactController,
                 label: 'Contact',
                 hintText: 'Enter the contact details',
+              ),
+              SizedBox(height: 20),
+              _buildInputField(
+                controller: _timeOfLostController,
+                label: 'Time of lost',
+                hintText: 'Enter the time of lost',
               ),
               SizedBox(height: 20),
               SizedBox(
