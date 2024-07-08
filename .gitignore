@@ -41,3 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+/backend/myenv
+
+/backend/reunify-3eef3-firebase-adminsdk-v6f5f-309e38c282.json

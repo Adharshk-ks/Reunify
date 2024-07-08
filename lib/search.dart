@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:reunifyfiire/info.dart'; // Import InfoPage
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -14,21 +17,59 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   XFile? _selectedImage;
+  List<Map<String, dynamic>> _similarImages = [];
+  bool _isSearching = false; // Track whether searching/loading
 
-  void _searchByName(String query) {
-    // Implement search by name logic here
-    print('Searching by name: $query');
+  Future<void> _search() async {
+    setState(() {
+      _isSearching = true; // Start searching/loading
+    });
+
+    if (_selectedImage != null || _searchController.text.isNotEmpty) {
+      String query = _searchController.text.trim();
+
+      String? base64Image;
+      if (_selectedImage != null) {
+        List<int> imageBytes = await _selectedImage!.readAsBytes();
+        base64Image = base64Encode(imageBytes);
+      }
+
+      print('Query: $query');
+      print('Base64 Image: $base64Image');
+
+      await _performSearch(query, base64Image);
+
+      setState(() {
+        _isSearching = false; // Finish searching/loading
+      });
+    } else {
+      setState(() {
+        _isSearching = false; // Finish searching/loading (if no search criteria)
+      });
+    }
   }
 
-  Future<void> _searchByImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+  Future<void> _performSearch(String query, String? base64Image) async {
+    final Map<String, dynamic> requestData = {
+      'query': query,
+      'image': base64Image,
+    };
+
+    final response = await http.post(
+      Uri.parse('http://192.168.1.34:5000/search'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(requestData),
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> similarImages = jsonDecode(response.body);
       setState(() {
-        _selectedImage = image;
+        _similarImages = similarImages.cast<Map<String, dynamic>>();
       });
-      // Implement search by image logic here
-      print('Searching by image: ${image.path}');
-      _searchByName('Image search: ${image.path}');
+    } else {
+      print('Failed to search: ${response.statusCode}');
     }
   }
 
@@ -65,16 +106,107 @@ class _SearchPageState extends State<SearchPage> {
             : null,
         suffixIcon: IconButton(
           icon: Icon(Icons.search),
-          onPressed: () {
-            String query = _searchController.text;
-            _searchByName(query);
-          },
+          onPressed: _search,
         ),
       ),
-      onSubmitted: (_) {
-        String query = _searchController.text;
-        _searchByName(query);
-      },
+      onSubmitted: (_) => _search(),
+    );
+  }
+
+  Widget _buildSearchResults() {
+    return Expanded(
+      child: _isSearching
+          ? Center(
+              child: CircularProgressIndicator(), // Show loading indicator while searching
+            )
+          : _similarImages.isNotEmpty
+              ? ListView.builder(
+                  itemCount: _similarImages.length,
+                  itemBuilder: (context, index) {
+                    // Extract fields safely
+                    String productName = _similarImages[index]['name'] ?? '';
+                    String location = _similarImages[index]['location'] ?? '';
+                    String contact = _similarImages[index]['contact'] ?? '';
+                    String imageUrl = _similarImages[index]['imageUrl'] ?? '';
+                    String userEmail = _similarImages[index]['userEmail'] ?? '';
+                    double similarityScore = _similarImages[index]['similarity_score'] ?? 0.0;
+                    bool isListed = _similarImages[index]['isListed'] ?? false;
+                    String description = _similarImages[index]['description'] ?? '';
+                    String time = _similarImages[index]['time'] ?? '';
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InfoPage(
+                              productName: productName,
+                              location: location,
+                              contact: contact,
+                              imageUrl: imageUrl,
+                              userEmail: userEmail,
+                              description: description,
+                              isListing: isListed,
+                              time: time,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        margin: const EdgeInsets.all(8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  image: DecorationImage(
+                                    image: NetworkImage(imageUrl),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 26),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productName,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text('Location: $location'),
+                                    Text('Contact: $contact'),
+                                    Text(
+                                      isListed ? 'FOUND' : 'LOST',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: isListed ? Colors.green : Colors.red,
+                                      ),
+                                    ),
+                                    Text('Similarity Score: ${similarityScore.toStringAsFixed(2)}'), // Display similarity score
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : Center(
+                  child: Text('No similar images found.'),
+                ),
     );
   }
 
@@ -92,7 +224,15 @@ class _SearchPageState extends State<SearchPage> {
             _buildSearchBar(),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _searchByImage,
+              onPressed: () async {
+                final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  setState(() {
+                    _selectedImage = image;
+                  });
+                  _search();
+                }
+              },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -102,6 +242,8 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
+            SizedBox(height: 16),
+            _buildSearchResults(),
           ],
         ),
       ),

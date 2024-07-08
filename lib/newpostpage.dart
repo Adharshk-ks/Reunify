@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:universal_io/io.dart' as uio;
 
 class NewPostPage extends StatefulWidget {
@@ -15,11 +16,13 @@ class NewPostPage extends StatefulWidget {
 class _NewPostPageState extends State<NewPostPage> {
   uio.File? _image;
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController(); // New controller for description
+  final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _timeOfLostController = TextEditingController(); // New controller for Time of lost
+  final TextEditingController _timeController = TextEditingController();
+  bool _isListing = true; // New variable for toggle state
   String? _imageUrl;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -34,12 +37,12 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Future<void> _submitPost() async {
     final name = _nameController.text;
-    final description = _descriptionController.text; // Get the description text
+    final description = _descriptionController.text;
     final location = _locationController.text;
     final contact = _contactController.text;
-    final timeOfLost = _timeOfLostController.text; // Get the time of lost text
+    final time = _timeController.text;
 
-    if (_image == null || name.isEmpty || description.isEmpty || location.isEmpty || contact.isEmpty || timeOfLost.isEmpty) {
+    if (_image == null || name.isEmpty || description.isEmpty || location.isEmpty || contact.isEmpty || time.isEmpty) {
       // Handle empty fields or image (e.g., show a Snackbar or Dialog)
       return;
     }
@@ -56,12 +59,14 @@ class _NewPostPageState extends State<NewPostPage> {
       // Save post data to Firestore
       await FirebaseFirestore.instance.collection('posts').add({
         'name': name,
-        'description': description, // Save description
+        'description': description,
         'location': location,
         'contact': contact,
-        'timeOfLost': timeOfLost, // Save time of lost
+        'time': time,
         'imageUrl': imageUrl,
+        'isListing': _isListing, // Save the toggle state
         'timestamp': Timestamp.now(),
+        'userEmail': user?.email,
       });
 
       // Navigate back or show success message
@@ -120,6 +125,22 @@ class _NewPostPageState extends State<NewPostPage> {
                 ),
               ),
               SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('List'),
+                  Switch(
+                    value: !_isListing,
+                    onChanged: (value) {
+                      setState(() {
+                        _isListing = !value;
+                      });
+                    },
+                  ),
+                  Text('Claim'),
+                ],
+              ),
+              SizedBox(height: 20),
               _buildInputField(
                 controller: _nameController,
                 label: 'Name',
@@ -145,22 +166,22 @@ class _NewPostPageState extends State<NewPostPage> {
               ),
               SizedBox(height: 20),
               _buildInputField(
-                controller: _timeOfLostController,
-                label: 'Time of lost',
-                hintText: 'Enter the time of lost',
+                controller: _timeController,
+                label: _isListing ? 'Time of Retrieval' : 'Time of Lost',
+                hintText: _isListing ? 'Enter the time of retrieval' : 'Enter the time of lost',
               ),
               SizedBox(height: 20),
               SizedBox(
-                width: double.infinity, // Full width button
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _submitPost,
                   child: Text('Submit'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple, // Background color
-                    foregroundColor: Colors.white, // Text color
-                    padding: EdgeInsets.symmetric(vertical: 15), // Button height
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10), // Rounded corners
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),

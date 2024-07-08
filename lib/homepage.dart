@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:reunifyfiire/widget/bottom_navigation.dart';
 import 'info.dart'; // Import the info.dart file where InfoPage is defined
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String _filter = 'All'; // Default filter value
 
   Widget _buildProductCard(BuildContext context, DocumentSnapshot document) {
     // Extract product details from the Firestore document
@@ -12,6 +20,10 @@ class HomePage extends StatelessWidget {
     String location = document['location'];
     String contact = document['contact'];
     String imageUrl = document['imageUrl'];
+    String userEmail = document['userEmail'];
+    String description = document['description']; // New argument
+    String time = document['time']; // New argument
+    bool isListing = document['isListing']; // New argument
 
     return GestureDetector(
       onTap: () {
@@ -24,6 +36,10 @@ class HomePage extends StatelessWidget {
               location: location,
               contact: contact,
               imageUrl: imageUrl,
+              userEmail: userEmail,
+              description: description, // Pass description to InfoPage
+              time: time, // Pass time to InfoPage
+              isListing: isListing, // Pass isListing to InfoPage
             ),
           ),
         );
@@ -61,6 +77,14 @@ class HomePage extends StatelessWidget {
                     SizedBox(height: 8),
                     Text('Location: $location'),
                     Text('Contact: $contact'),
+                    Text(
+                      isListing ? 'FOUND' : 'LOST',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: isListing ? Colors.green : Colors.red,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -175,20 +199,72 @@ class HomePage extends StatelessWidget {
         color: Color.fromARGB(255, 236, 215, 252), // Set your desired background color here
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: StreamBuilder(
-            stream: FirebaseFirestore.instance.collection('posts').snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: DropdownButtonHideUnderline(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: DropdownButton<String>(
+                        value: _filter,
+                        items: <String>['All', 'Found', 'Lost'].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _filter = newValue!;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-              return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  return _buildProductCard(context, snapshot.data!.docs[index]);
-                },
-              );
-            },
+                    final filteredDocs = snapshot.data!.docs.where((doc) {
+                      if (_filter == 'All') return true;
+                      if (_filter == 'Found') return doc['isListing'] == true;
+                      if (_filter == 'Lost') return doc['isListing'] == false;
+                      return true;
+                    }).toList();
+
+                    return ListView.builder(
+                      itemCount: filteredDocs.length,
+                      itemBuilder: (context, index) {
+                        return _buildProductCard(context, filteredDocs[index]);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
